@@ -4,8 +4,6 @@
 
 	MACHINE 68020
 
-	;jmp main
-
 	include "init.i"
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
@@ -14,9 +12,7 @@
 
 	section	code,code
 
-;_main
 _Start
-;main
 	bsr initC2P8bpl ; set parameters for chunky to planar routine
 	bsr init ; switch off system and set custom copperlist etc
 	move.l #copperlist8bpl,$dff080	; Set our copperlist
@@ -47,6 +43,7 @@ _Start
 
 	rts
 
+; This is how we call c functions :o
 drawFromC
         lea screen,a0
         move.l sync,d0
