@@ -4,15 +4,19 @@
 
 	MACHINE 68020
 
-	jmp main
+	;jmp main
 
 	include "init.i"
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
 
+        public _Start
+
 	section	code,code
 
-main
+;_main
+_Start
+;main
 	bsr initC2P8bpl ; set parameters for chunky to planar routine
 	bsr init ; switch off system and set custom copperlist etc
 	move.l #copperlist8bpl,$dff080	; Set our copperlist
@@ -22,17 +26,19 @@ main
 
 	move.l #texture,d0
 	add.l #6,d0 ; skip .uc header in texture
-	move.l d0,newPalette
+	move.l d0,newPalette    ; save address of texture in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
 
 .mainloop
 	
-		bsr drawTestScreen
+        bsr drawFromC
+	;bsr drawHorizLine
+	;bsr drawTestScreen
 
-		lea screen,a0
-		bsr flipScreen8bpl
+	lea screen,a0
+	bsr flipScreen8bpl
 
-		tst.w exitflag
+	tst.w exitflag
 
 	beq .mainloop
 
@@ -41,7 +47,25 @@ main
 
 	rts
 
+drawFromC
+        lea screen,a0
+        move.l sync,d0
+        bsr _calculate
+        rts
 
+drawHorizLine
+        lea screen,a0
+        move.l #44,d0
+        move.l sync,d1
+        moveq #0,d3
+
+.lop
+        move.b d3,(a0)+
+        add.b #1,d3
+        dbra d1,.lop
+
+        rts
+        
 
 drawTestScreen
 	; draws a scrolling texture to chunky screen
@@ -83,4 +107,4 @@ screen
 texture
 	incbin "data/texture.uc"
 soundtrack
-	incbin "data/whatthisisclip.wav"
+	incbin "data/thulenebula.wav"
