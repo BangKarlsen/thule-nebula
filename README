@@ -1,38 +1,14 @@
 **WORK IN PROGRESS**
 
-Here are some fairly basic m68k asm demo startup sources for Amiga 1200/4000.
+* I STOLE EVERYTHING FROM dodke! See https://github.com/itslauri/amiga-startup
+for the original repository. Thanks for providing such comfy starting grounds.
 
-Features at the moment include:
+* Features a track from b3nny. He doesnt know yet.
 
-- switching off the OS
-- custom AGA copperlists
-- setting up chunky to planar routines (by Kalms)
-- triple buffering
-- a vertical blank interrupt for timer and other per frame code
-- updating copperlist with new bitplanes and/or palette in vblank
-- ADPCM music replayer (by BriteLite)
-- variation with 320x176 8 bit palette mode
-- variation with 220x176 15 bit HAM8 mode
+* The idea is to mix asm and c.
 
-The main goals for this project are to keep it really simple to use,
-not require any external libraries or includes and to support compiling on
-any OS. I'm planning on adding C headers and a test program soon.
+* It compiles with vbcc/vasm. I tried getting more fancy gcc12 to work but had
+  weird linker issues. For now vbcc is good enough and nice and simple.
 
-This has been tested mainly with PhxAss and should compile simply by running:
 
-> phxass test8bpl.s
-
-> phxass testham.s
-
-Using vasm should also work and I've tried it for cross compiling on a Mac:
-> vasmm68k test8bpl.s -Fhunkexe -o test8bpl
-
-The 8 bpl test now includes music playback using an ADPCM routine from
-BriteLite. It has been tested to work with at least files saved using
-Audacity in .wav IMA 4:1 ADPCM format at a sample rate supported by Paula.
-
-The init stuff is mostly written by "some people".
-
-If you need help talk to the old farts on #amycoders @ IRCNet
-
--dodke / unique, supergroup etc
+  --faaret / altskalvæk
