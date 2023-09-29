@@ -4,18 +4,18 @@
 extern Start();
 
 #define MSG_LENGTH 32
-char text[MSG_LENGTH];
-#define SERIAL_LOG(msg) kprintf("%s", msg);
-#define SERIAL_LOG_FMT(fmt, var) snprintf(text, MSG_LENGTH, fmt, var); kprintf(text);
+char msg_buffer[MSG_LENGTH];
+#define SERIAL_LOG(msg) kprintf(msg);
+#define SERIAL_LOG_FMT(fmt, var) snprintf(msg_buffer, MSG_LENGTH, fmt, var); kprintf(msg_buffer);
 
 int main() {
 
         printf("\nFind your tr0ffel and romkugler - here we go!..--~~~>>0\n\n(kom saa demo)\n\n");
-        SERIAL_LOG("\n<Begin debug>\n")
+        SERIAL_LOG("\n <Begin debug> \n")
 
         Start();
 
-        SERIAL_LOG("\n<EOD>\n")
+        SERIAL_LOG("\n <End debug> \n")
         return 0;
 }
 
