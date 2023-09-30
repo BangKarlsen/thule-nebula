@@ -47,5 +47,11 @@ socat pty,raw,echo=0,link=/tmp/vser -,raw,echo=0
 
 (`brew install socat` if you don't have that already)
 
+* Debugging from FS-UAE:
+    - Add `console_debugger = 1` to your config
+    - Run FS-UAE from terminal with the config specified: `/Applications/FS-UAE\ Launcher.app/Contents/MacOS/fs-uae-launcher ~/FS-UAE/Configurations/faaret\ A1200.fs-uae`
+    - Press F11+d when demo is running to activate debugger
+    - `?` for help. `g` to continue
+
 
   --faaret / altskalvæk
