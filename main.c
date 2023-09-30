@@ -19,8 +19,7 @@ int main() {
         return 0;
 }
 
-void calculate( __reg("a0") unsigned char *screen, __reg("d0") int step )
-{
+void calculate( __reg("a0") unsigned char *screen, __reg("d0") int step ) {
         const int width=320;
 
         int x = 160 + step%20;
@@ -29,4 +28,17 @@ void calculate( __reg("a0") unsigned char *screen, __reg("d0") int step )
         SERIAL_LOG_FMT("step=%d\n", step)
 
         screen[x+y*width] = step%256;
+}
+
+void cdrawback( __reg("a0") unsigned char *screen, __reg("a1") unsigned char *texture) {
+        const int width = 320;
+
+        // naive fill screen, but it works - there is texture!
+        for(int x = 0; x < 320; x++) {
+                for(int y = 0; y < 176; y++) {
+                        screen[x+y*width] =texture[x+y*width]; 
+               }       
+        }
+
+
 }

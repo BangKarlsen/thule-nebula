@@ -14,6 +14,7 @@ newBitplanes: dc.l 0
 updatePaletteFlag: dc.w 0
 newPalette: dc.l 0
 
+; vblank interrupt
 Lvl3irq:
 	movem.l	d0-a6,-(sp)
 

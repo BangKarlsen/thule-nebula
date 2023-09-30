@@ -20,15 +20,13 @@ _Start
 	lea soundtrack,a0
 	bsr initMusic
 
-	move.l #texture,d0
-	add.l #6,d0 ; skip .uc header in texture
-	move.l d0,newPalette    ; save address of texture in #newPalette
+        lea back3dpal, a1       ; set initial palette
+	move.l a1,newPalette    ; save address of palette in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
 
 .mainloop
 	
-        bsr drawFromC
-	;bsr drawHorizLine
+        bsr drawBackground
 	;bsr drawTestScreen
 
 	lea screen,a0
@@ -50,19 +48,11 @@ drawFromC
         bsr _calculate
         rts
 
-drawHorizLine
+drawBackground
         lea screen,a0
-        move.l #44,d0
-        move.l sync,d1
-        moveq #0,d3
-
-.lop
-        move.b d3,(a0)+
-        add.b #1,d3
-        dbra d1,.lop
-
+        lea back3d,a1
+        bsr _drawback
         rts
-        
 
 drawTestScreen
 	; draws a scrolling texture to chunky screen
@@ -104,5 +94,10 @@ screen
 texture
 	incbin "data/texture.uc"
 soundtrack
-	incbin "data/igen.wav"
-	; incbin "data/thulenebula.wav"
+	incbin "data/igen.wav"          ; stereo, 22050 Hz
+	; incbin "data/thulenebula.wav" ; mono, 22050 Hz
+
+back3d
+        incbin "data/back_3d.chunky"
+back3dpal
+        incbin "data/back_3d.pal"
