@@ -542,6 +542,7 @@ step_table
 
 *-------------------------------------------------------------------------
 
+; interrupt
 Play_Stream_stereo:
         movem.l d0-a6,-(sp)				; save all registers
         lea     ActChipBuffer(pc),a1	; address of chip buffer ID (0 or –1)
@@ -556,12 +557,12 @@ Play_Stream_stereo:
         move.l  a1,a2                   ; make copy of target buffer
 
         lea     StreamPosition(pc),a3   ; address of stream position
-		move.l	chunk,d0
+	move.l	chunk,d0
         move.l  (a3),a0                 ; get position in the stream
         add.l	d0,(a3)                 ; step further in stream by increasing pos
 		cmp.l	StreamEnd,a0
 		blt.s	.streamok
-		move.l	StreamBegin,(a3)
+		move.l	StreamBegin,(a3); play from beginning again
 .streamok
 		bsr		decodeAdpcm_stereo
 
