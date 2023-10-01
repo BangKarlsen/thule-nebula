@@ -67,6 +67,7 @@ accelerator = blizzard-1230-iv
 amiga_model = A1200/1230
 chip_memory = 2048
 console_debugger = 1
+floppy_drive_volume = 0
 hard_drive_0 = /Users/hulkhojgaard/amiga/dir/System
 hard_drive_1 = /Users/hulkhojgaard/amiga/dir/Work
 hard_drive_2 = /Users/hulkhojgaard/amiga/kode
