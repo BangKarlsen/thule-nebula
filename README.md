@@ -68,11 +68,11 @@ amiga_model = A1200/1230
 chip_memory = 2048
 console_debugger = 1
 floppy_drive_volume = 0
-hard_drive_0 = /Users/hulkhojgaard/amiga/dir/System
-hard_drive_1 = /Users/hulkhojgaard/amiga/dir/Work
-hard_drive_2 = /Users/hulkhojgaard/amiga/kode
-hard_drive_3 = /Users/hulkhojgaard/kode/amiga
-kickstart_file = /Users/hulkhojgaard/amiga/rom/uaerom/rom/kick310.rom
+hard_drive_0 = /Users/der-er-en-bjørn-i-min-bil/amiga/dir/System
+hard_drive_1 = /Users/der-er-en-bjørn-i-min-bil/amiga/dir/Work
+hard_drive_2 = /Users/der-er-en-bjørn-i-min-bil/amiga/kode
+hard_drive_3 = /Users/der-er-en-bjørn-i-min-bil/kode/amiga
+kickstart_file = /Users/der-er-en-bjørn-i-min-bil/amiga/rom/uaerom/rom/kick310.rom
 serial_port = /tmp/vser
 zorro_iii_memory = 32768
 ```
