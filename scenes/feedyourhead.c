@@ -72,7 +72,7 @@ void addFire(char* fire, int vblank)
 
 void extraSparks(char* fire)
 {
-    int x = rand255() + 32;     // what ???
+    int x = rand255() + 32; 
     int y = rand255() % FIRE_H - 10;    // buggy? could be negative?
     fire[y * FIRE_W + x - 1] = rand255();
     fire[(y + 1) * FIRE_W + x] = rand255();
