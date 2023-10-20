@@ -53,9 +53,9 @@ UBYTE rand255()
 
 void addFire(char* fire, int vblank)
 {
-    UBYTE yMax = vblank % 2 ? 2 : 1;
+    //UBYTE yMax = vblank % 2 ? 2 : 1;
     
-    for (int fireY = 0; fireY < yMax * 320; fireY += 320)     // add to bottom of fire buffer
+    for (int fireY = 0; fireY < 2 * 320; fireY += 320)     // add to bottom of fire buffer
     {
         for (int fireX = 2; fireX < 320 - 2; fireX++)
         {
@@ -86,9 +86,6 @@ void updateFire(char* fire, int vblank)
     /* move fire upwards, start at bottom*/
     for (int y_lines = 0; y_lines < FIRE_H * 320 ; y_lines += 320)
     {
-        // erstat `y_lines * 320` med var.
-        // så kun muls 320 én gang.
-        // og noget med y_lines += 320 
         for (int x = 0; x < 320; ++x)
         {
             int temp;
