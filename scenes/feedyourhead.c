@@ -81,6 +81,8 @@ void extraSparks(char* fire)
 
 void updateFire(char* fire, int vblank) 
 {
+    UBYTE div = vblank % 3 ? 2 : 1; // tweak here. 2 ? 1 : 2
+
     /* move fire upwards, start at bottom*/
     for (int y_lines = 0; y_lines < FIRE_H * 320 ; y_lines += 320)
     {
@@ -95,14 +97,14 @@ void updateFire(char* fire, int vblank)
                 temp = fire[y_lines];
                 temp += fire[y_lines + 1];
                 temp += fire[y_lines - 320];
-                temp /= 3;
+                temp >>= div;
             }
             else if (x == 320 - 1) /* at the right border*/
             {
                 temp = fire[y_lines + x];
                 temp += fire[y_lines - 320 + x];
                 temp += fire[y_lines + x - 1];
-                temp /= 3;
+                temp >>= div;
             }
             else /* main case */
             {
@@ -138,15 +140,15 @@ void copyFireToScreen(char* fire, char* screen)
     UBYTE* image = screen + SCREEN_W * SCREEN_HALF_H;        /*start in the right bottom corner*/
     UBYTE* imageMirror = screen + 320 * SCREEN_HALF_H;  // is this correct?
 
-    for (int y = 0; y < FIRE_H; y++)
+    for (int y_lines = 0; y_lines < FIRE_H * 320; y_lines += 320)
     {
-        image -= 320;   // skip every second line for xtra coolness
+        image -= 320;   // skip every_lines second line for xtra coolness
         imageMirror += 320;
         for (int x = 0; x < FIRE_W; x++)
         {
-            *image = fire[y * 320 + x];
+            *image = fire[y_lines + x];
             image--;
-            *imageMirror = fire[y * 320 + x];
+            *imageMirror = fire[y_lines + x];
             imageMirror++;
         }
     }
