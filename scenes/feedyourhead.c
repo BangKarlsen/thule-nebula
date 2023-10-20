@@ -24,8 +24,10 @@ void init_feedyourhead(__reg("a0") char *screen)
     {
         SERIAL_LOG("Could not make fire >:|")
     }
+
     memset(fire, 0, FIRE_W * FIRE_H);
     memset(screen, 0, SCREEN_W * SCREEN_H); // clear screen
+                                            //
     SERIAL_LOG("init good")
 }
 
