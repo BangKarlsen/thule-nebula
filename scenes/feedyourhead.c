@@ -53,16 +53,16 @@ void addFire(char* fire, int vblank)
 {
     UBYTE yMax = vblank % 2 ? 2 : 1;
     
-    for (int fireY = 0; fireY < yMax; ++fireY)     // add to bottom of fire buffer
+    for (int fireY = 0; fireY < yMax * 320; fireY += 320)     // add to bottom of fire buffer
     {
         for (int fireX = 2; fireX < 320 - 2; fireX++)
         {
             if (rand255() > 220)
             {
-                fire[fireY * 320 + fireX] = 250;
+                fire[fireY + fireX] = 250;
             } else
             {
-                fire[fireY * 320 + fireX] = rand255() % 100;
+                fire[fireY + fireX] = rand255() % 100;
             }
         }
     }
