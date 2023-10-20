@@ -8,7 +8,7 @@
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
 
-        public _Start
+        public _Start;, _newPalette, _updatePaletteFlag
 
 	section	code,code
 
@@ -20,14 +20,18 @@ _Start
 	lea soundtrack,a0
 	bsr initMusic
 
-        lea back3dpal, a1       ; set initial palette
-	move.l a1,newPalette    ; save address of palette in #newPalette
+    lea pal_feedyourhead,a0       ; set initial palette
+    ; lea back3dpal,a0       ; set initial palette
+	move.l a0,newPalette    ; save address of palette in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
+
+	lea screen,a0
+    bsr _init_feedyourhead     ; a0 screen  
 
 .mainloop
 	
-        bsr drawBackground
-	;bsr drawTestScreen
+    ;bsr drawBackground
+    bsr drawFeedYourHead
 
 	lea screen,a0
 	bsr flipScreen8bpl
@@ -36,16 +40,18 @@ _Start
 
 	beq .mainloop
 
+    bsr _deinit_feedyourhead
 	bsr stopMusic
 	bsr deinit
 
 	rts
 
 ; This is how we call c functions :o
-drawFromC
+drawFeedYourHead
         lea screen,a0
+        ;lea fire, a1
         move.l sync,d0
-        bsr _calculate
+        bsr _tick_feedyourhead
         rts
 
 drawBackground
@@ -89,15 +95,21 @@ drawTestScreen
 screen
 	blk.b 320*176,0
 
+fire
+	blk.b 320*64,0
+
 	section data,data
 
 texture
 	incbin "data/texture.uc"
 soundtrack
-	incbin "data/igen.wav"          ; stereo, 22050 Hz
-	; incbin "data/thulenebula.wav" ; mono, 22050 Hz
+	; incbin "data/igen.wav"          ; stereo, 22050 Hz
+	incbin "data/thulenebula.wav" ; mono, 22050 Hz
 
 back3d
         incbin "data/back_3d.chunky"
 back3dpal
         incbin "data/back_3d.pal"
+
+pal_feedyourhead
+        incbin "data/feedyourhead.pal"
