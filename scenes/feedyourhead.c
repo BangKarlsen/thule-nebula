@@ -80,41 +80,41 @@ void extraSparks(char* fire)
 void updateFire(char* fire, int vblank) 
 {
     /* move fire upwards, start at bottom*/
-    for (int y = 0; y < FIRE_H ; ++y)
+    for (int y_lines = 0; y_lines < FIRE_H * 320 ; y_lines += 320)
     {
-        // erstat `y * 320` med var.
+        // erstat `y_lines * 320` med var.
         // så kun muls 320 én gang.
-        // og noget med y += 320 
+        // og noget med y_lines += 320 
         for (int x = 0; x < 320; ++x)
         {
             int temp;
             if (x == 0) /* at the left border*/
             {
-                temp = fire[y * 320];
-                temp += fire[y * 320 + 1];
-                temp += fire[y * 320 - 320];
+                temp = fire[y_lines];
+                temp += fire[y_lines + 1];
+                temp += fire[y_lines - 320];
                 temp /= 3;
             }
             else if (x == 320 - 1) /* at the right border*/
             {
-                temp = fire[y * 320 + x];
-                temp += fire[y * 320 - 320 + x];
-                temp += fire[y * 320 + x - 1];
+                temp = fire[y_lines + x];
+                temp += fire[y_lines - 320 + x];
+                temp += fire[y_lines + x - 1];
                 temp /= 3;
             }
             else /* main case */
             {
-                temp = fire[y * 320 + x];
-                temp += fire[y * 320 + x + 1];
-                temp += fire[y * 320 + x - 1];
-                temp += fire[y * 320 - 320 + x];
+                temp = fire[y_lines + x];
+                temp += fire[y_lines + x + 1];
+                temp += fire[y_lines + x - 1];
+                temp += fire[y_lines - 320 + x];
                 temp >>= 2;
             }
             if (1 || vblank < 3000)
             {
                 if (temp > 170)
                 {
-                    temp -= 2; /* decay */
+                    temp -= 2; /* decay_lines */
                 }
             } else {
                 if (temp > 0 ) {
@@ -125,7 +125,7 @@ void updateFire(char* fire, int vblank)
                     }*/
             }
 
-            fire[y * 320 + x] = temp;
+            fire[y_lines + x] = temp;
         }
     }
 
