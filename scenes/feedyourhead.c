@@ -27,8 +27,8 @@ void init_feedyourhead(__reg("a0") char *screen)
 
     memset(fire, 0, FIRE_W * FIRE_H);
     memset(screen, 0, SCREEN_W * SCREEN_H); // clear screen
-                                            //
-    SERIAL_LOG("init good")
+
+    SERIAL_LOG("init good\n")
 }
 
 // Returns values from 1 to 255 inclusive, period is 255

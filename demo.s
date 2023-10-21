@@ -8,7 +8,7 @@
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
 
-        public _Start;, _newPalette, _updatePaletteFlag
+    public _Start, _drawFeedYourHead, _drawBackground
 
 	section	code,code
 
@@ -20,8 +20,8 @@ _Start
 	lea soundtrack,a0
 	bsr initMusic
 
+    ;lea pal_back3d,a0       ; set initial palette
     lea pal_feedyourhead,a0       ; set initial palette
-    ; lea back3dpal,a0       ; set initial palette
 	move.l a0,newPalette    ; save address of palette in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
 
@@ -30,8 +30,8 @@ _Start
 
 .mainloop
 	
-    ;bsr drawBackground
-    bsr drawFeedYourHead
+    move.l sync,d0
+    bsr _maintick
 
 	lea screen,a0
 	bsr flipScreen8bpl
@@ -46,19 +46,27 @@ _Start
 
 	rts
 
-; This is how we call c functions :o
-drawFeedYourHead
-        lea screen,a0
-        ;lea fire, a1
-        move.l sync,d0
-        bsr _tick_feedyourhead
-        rts
+_drawFeedYourHead
+    clr.w $100
+    lea screen,a0
+    move.l sync,d0
+    bsr _tick_feedyourhead
+    rts
 
-drawBackground
-        lea screen,a0
-        lea back3d,a1
-        bsr _drawback
-        rts
+_drawBackground
+    clr.w $102
+	tst.w pal_back3d_is_set
+	bne .pal_back_set
+	move.w #1,pal_back3d_is_set
+	lea pal_back3d,a0
+	move.l a0,newPalette    ; save address of palette in #newPalette
+	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
+.pal_back_set
+
+    lea screen,a0
+    lea back3d,a1
+    bsr _drawback
+    rts
 
 drawTestScreen
 	; draws a scrolling texture to chunky screen
@@ -95,21 +103,25 @@ drawTestScreen
 screen
 	blk.b 320*176,0
 
-fire
-	blk.b 320*64,0
-
 	section data,data
 
 texture
 	incbin "data/texture.uc"
+
 soundtrack
 	; incbin "data/igen.wav"          ; stereo, 22050 Hz
 	incbin "data/thulenebula.wav" ; mono, 22050 Hz
 
 back3d
-        incbin "data/back_3d.chunky"
-back3dpal
-        incbin "data/back_3d.pal"
+    incbin "data/back_3d.chunky"
+
+pal_back3d
+    incbin "data/back_3d.pal"
+pal_back3d_is_set: dc.l 0
+pal_back3d_end: dc.b "back3d_end"
+
 
 pal_feedyourhead
-        incbin "data/feedyourhead.pal"
+    incbin "data/feedyourhead.pal"
+pal_feedyourhead_is_set: dc.l 0
+pal_feedyourhead_end: dc.b "feedyourhead_end"
