@@ -8,7 +8,7 @@
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
 
-    public _Start, _drawFeedYourHead, _drawBackground
+    public _Start, _drawBackground; _drawFeedYourHead;
 
 	section	code,code
 
@@ -25,11 +25,13 @@ _Start
 	move.l a0,newPalette    ; save address of palette in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
 
-	lea screen,a0
-    bsr _init_feedyourhead     ; a0 screen  
+	;lea screen,a0
+    ;bsr _init_feedyourhead     ; a0 screen  
+    bsr _init_3d
 
 .mainloop
 	
+    lea screen,a0
     move.l sync,d0
     bsr _maintick
 
@@ -40,18 +42,19 @@ _Start
 
 	beq .mainloop
 
-    bsr _deinit_feedyourhead
+    ;bsr _deinit_feedyourhead
+    bsr _deinit_3d
 	bsr stopMusic
 	bsr deinit
 
 	rts
 
-_drawFeedYourHead
-    clr.w $100
-    lea screen,a0
-    move.l sync,d0
-    bsr _tick_feedyourhead
-    rts
+;_drawFeedYourHead
+;    ;clr.w $100
+;    lea screen,a0
+;    move.l sync,d0
+;    bsr _tick_feedyourhead
+;    rts
 
 _drawBackground
     clr.w $102
@@ -111,6 +114,9 @@ texture
 soundtrack
 	; incbin "data/igen.wav"          ; stereo, 22050 Hz
 	incbin "data/thulenebula.wav" ; mono, 22050 Hz
+
+pal2
+    blk.b 1024,255
 
 back3d
     incbin "data/back_3d.chunky"

@@ -7,6 +7,6 @@
 #define SERIAL_LOG(msg) kprintf(msg);
 
 void log(unsigned char* text);
-void log_fmt(unsigned char* text, int var);
+void log_fmt(unsigned char* fmt_text, int var);
 
 #endif

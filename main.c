@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <Hardware>
+#include <hardware/custom.h>
 #include "system/logger.h"
+#include "scenes/3d.h"
+
+volatile struct Custom *custom = (struct Custom *)0xdff000;
+
 
 extern Start();
-extern drawFeedYourHead();
+//extern drawFeedYourHead();
 extern drawBackground();
 
 /* #define COLOR00 0xdff180 */
@@ -21,11 +26,25 @@ int main()
     return 0;
 }
 
-void maintick(__reg("d0") int sync)
+void maintick(__reg("a0") char* screen, __reg("d0") int sync)
 {
-    if(sync > 0 && sync < 10000) {
-        drawFeedYourHead();
+    if(sync > 0 && sync < 10000) 
+    {
+        //drawFeedYourHead();
+        //tick_3d_unroll(screen);
+        tick_3d(screen);
     }
+/*
+    if(!(sync % 10)) 
+    {
+        log_fmt("sync=%d\n", sync);
+        custom->color[0] = 0xf0f;	// bg white
+    }
+    else 
+    {
+        custom->color[0] = 0xf0f;	// bg black
+    }
+    */
 }
 
 /* void calculate(__reg("a0") unsigned char *screen, __reg("d0") int step ) */

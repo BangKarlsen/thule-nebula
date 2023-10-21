@@ -153,7 +153,7 @@ void copyFireToScreen(char* fire, char* screen)
 
 void tick_feedyourhead(__reg("a0") unsigned char* screen, __reg("d0") int vblank)
 {
-    log_fmt("vblank=%d\n", vblank);
+    //log_fmt("vblank=%d\n", vblank);
 
     addFire(fire, vblank);
 
