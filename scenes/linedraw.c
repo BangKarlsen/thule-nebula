@@ -1,16 +1,6 @@
-#include <clib/dos_protos.h>
 #include <clib/intuition_protos.h>
 
 #include "linedraw.h"  // not currently used
-
-/*
-* Draws a dot at (X0,Y0)
-*/
-
-void dot(unsigned int x0, unsigned int y0, unsigned char colour, UBYTE *chunky) /* coordinates at which to draw dot, with */
-{
-	chunky[y0*320+x0] = colour;
-}
 
 /*
 * Draws a line in octant 0 or 3 ( |DeltaX| >= DeltaY ).
@@ -36,7 +26,7 @@ void Octant0(unsigned int X0,
 	ErrorTerm = DeltaYx2 - (int) DeltaX;
 
 	/* Draw the line */
-	dot(X0, Y0, colour, chunky); /* draw the first pixel */
+	chunky[Y0*320+X0] = colour;/* draw the first pixel */
 
 	while ( DeltaX-- )
 	{
@@ -54,7 +44,7 @@ void Octant0(unsigned int X0,
 		}
 
 		X0 += XDirection; /* advance the X coordinate */
-		dot(X0, Y0, colour, chunky); /* draw a pixel */
+	    chunky[Y0*320+X0] = colour;
 	}
 }
 
@@ -75,7 +65,7 @@ void Octant1(unsigned int X0, unsigned int Y0, unsigned int DeltaX, unsigned int
 	DeltaXx2MinusDeltaYx2 = DeltaXx2 - (int) ( DeltaY * 2 );
 	ErrorTerm = DeltaXx2 - (int) DeltaY;
 
-	dot(X0, Y0, colour, chunky); /* draw the first pixel */
+    chunky[Y0*320+X0] = colour;
 
 	while ( DeltaY-- )
 	{
@@ -93,7 +83,7 @@ void Octant1(unsigned int X0, unsigned int Y0, unsigned int DeltaX, unsigned int
 		}
 
 		Y0++; /* advance the Y coordinate */
-		dot(X0, Y0, colour, chunky); /* draw a pixel */
+	    chunky[Y0*320+X0] = colour;
 	}
 }
 /*
