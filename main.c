@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <Hardware>
 #include "system/logger.h"
 #include "scenes/3d.h"
 #include "scenes/dots.h"
