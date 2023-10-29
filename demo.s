@@ -8,7 +8,7 @@
 	include "init-8bpl.i"
 	include "adpcm/adpcm-player.i"
 
-    public _Start, _drawBackground; _drawFeedYourHead;
+    public _Start;
 
 	section	code,code
 
@@ -25,7 +25,7 @@ _Start
 	move.l a0,newPalette    ; save address of palette in #newPalette
 	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
 
-	;lea screen,a0
+	lea screen,a0
     ;bsr _init_feedyourhead     ; a0 screen  
     bsr _init_3d
 
@@ -49,34 +49,26 @@ _Start
 
 	rts
 
-;_drawFeedYourHead
-;    ;clr.w $100
+;_drawBackground
+;    clr.w $102
+;	tst.w pal_back3d_is_set
+;	bne .pal_back_set
+;	move.w #1,pal_back3d_is_set
+;	lea pal_back3d,a0
+;	move.l a0,newPalette    ; save address of palette in #newPalette
+;	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
+;.pal_back_set
+;
 ;    lea screen,a0
-;    move.l sync,d0
-;    bsr _tick_feedyourhead
+;    lea back3d,a1
+;    bsr _drawback
 ;    rts
-
-_drawBackground
-    clr.w $102
-	tst.w pal_back3d_is_set
-	bne .pal_back_set
-	move.w #1,pal_back3d_is_set
-	lea pal_back3d,a0
-	move.l a0,newPalette    ; save address of palette in #newPalette
-	move.w #1,updatePaletteFlag ; set flag to update palette in next vblank int
-.pal_back_set
-
-    lea screen,a0
-    lea back3d,a1
-    bsr _drawback
-    rts
 
 drawTestScreen
 	; draws a scrolling texture to chunky screen
 
 	lea screen,a0
 	lea texture,a1
-	adda.l #6+256*4,a1 ; skip .uc header and palette
 
 	move.l sync,d2 ; sync is our global timer incremented in vblank interrupt 50 times a second
 	move.l #176-1,d0
@@ -94,7 +86,7 @@ drawTestScreen
 		endr
 	dbra d1,.xloop
 
-	adda.l #256,a1
+	adda.l #320,a1
 
 	dbra d0,.yloop
 

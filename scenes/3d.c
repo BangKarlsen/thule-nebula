@@ -198,9 +198,9 @@ void tick_3d(char *screen)
     // DRAW OBJECT
     for(i = 0; i < NRPOINTS/2; i++)
     {
-        linedraw(scrx[i], scry[i], scrx[i+4], scry[i+4], rotx&255, screen);
-        linedraw(scrx[i], scry[i], scrx[(i+1)%4], scry[(i+1)%4], (rotx)&255, screen);
-        linedraw(scrx[i+4], scry[i+4], scrx[((i+1)%4)+4], scry[((i+1)%4)+4], (rotx)&255, screen);
+        linedraw(scrx[i], scry[i], scrx[i+4], scry[i+4], 55, screen);
+        linedraw(scrx[i], scry[i], scrx[(i+1)%4], scry[(i+1)%4], 55, screen);
+        linedraw(scrx[i+4], scry[i+4], scrx[((i+1)%4)+4], scry[((i+1)%4)+4], 55, screen);
     }
 }    
 

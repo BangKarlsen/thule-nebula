@@ -4,11 +4,7 @@
 #include "scenes/3d.h"
 #include "scenes/dots.h"
 
-
-
 extern Start();
-//extern drawFeedYourHead();
-//extern drawBackground();
 
 /* extern UWORD* newPalette; */
 /* extern UWORD* updatePaletteFlag; */
@@ -30,8 +26,8 @@ void maintick(__reg("a0") char* screen, __reg("d0") int sync)
     {
         //drawFeedYourHead();
         //tick_3d_unroll(screen);
-        //tick_3d(screen);
-        tick_dots(screen, sync);
+        tick_3d(screen);
+        //tick_dots(screen, sync);
     }
 }
 
