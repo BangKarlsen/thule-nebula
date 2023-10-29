@@ -51,9 +51,9 @@ UBYTE rand255()
     return smof ^= (smof << 3);
 }
 
-void addFire(char* fire, int vblank)
+void addFire(char* fire, int sync)
 {
-    //UBYTE yMax = vblank % 2 ? 2 : 1;
+    //UBYTE yMax = sync % 2 ? 2 : 1;
     
     for (int fireY = 0; fireY < 2 * 320; fireY += 320)     // add to bottom of fire buffer
     {
@@ -79,9 +79,9 @@ void extraSparks(char* fire)
     fire[y * FIRE_W + x + 1] = rand255();
 }
 
-void updateFire(char* fire, int vblank) 
+void updateFire(char* fire, int sync) 
 {
-    UBYTE div = vblank % 3 ? 2 : 1; // tweak here. 2 ? 1 : 2
+    UBYTE div = sync % 3 ? 2 : 1; // tweak here. 2 ? 1 : 2
 
     /* move fire upwards, start at bottom*/
     for (int y_lines = 0; y_lines < FIRE_H * 320 ; y_lines += 320)
@@ -111,7 +111,7 @@ void updateFire(char* fire, int vblank)
                 temp += fire[y_lines - 320 + x];
                 temp >>= 2;
             }
-            if (1 || vblank < 3000)
+            if (1 || sync < 3000)
             {
                 if (temp > 170)
                 {
@@ -151,18 +151,18 @@ void copyFireToScreen(char* fire, char* screen)
     }
 }
 
-void tick_feedyourhead(__reg("a0") unsigned char* screen, __reg("d0") int vblank)
+void tick_feedyourhead(unsigned char* screen, int sync)
 {
-    //log_fmt("vblank=%d\n", vblank);
+    //log_fmt("sync=%d\n", sync);
 
-    addFire(fire, vblank);
+    addFire(fire, sync);
 
-    if (vblank % 2)
+    if (sync % 2)
     {
         extraSparks(fire);
     }
 
-    updateFire(fire, vblank);
+    updateFire(fire, sync);
     copyFireToScreen(fire, screen);
 }
 

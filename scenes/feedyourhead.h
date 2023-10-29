@@ -1,5 +1,5 @@
-void init_feedyourhead(char* chunky);
+void init_feedyourhead(char* screen);
 
-void tick_feedyourhead(char* chunky, int vblank);
+void tick_feedyourhead(unsigned char* screen, int sync);
 
 void deinit_feedyourhead();

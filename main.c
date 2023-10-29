@@ -3,11 +3,9 @@
 #include "system/logger.h"
 #include "scenes/3d.h"
 #include "scenes/dots.h"
+#include "scenes/feedyourhead.h"
 
 extern Start();
-
-/* extern UWORD* newPalette; */
-/* extern UWORD* updatePaletteFlag; */
 
 int main()
 {
@@ -24,7 +22,7 @@ void maintick(__reg("a0") char* screen, __reg("d0") int sync)
 {
     if(sync > 0 && sync < 10000) 
     {
-        //drawFeedYourHead();
+        //tick_feedyourhead(screen, sync);
         tick_3d(screen);
         //tick_dots(screen, sync);
     }
