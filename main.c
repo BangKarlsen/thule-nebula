@@ -25,7 +25,6 @@ void maintick(__reg("a0") char* screen, __reg("d0") int sync)
     if(sync > 0 && sync < 10000) 
     {
         //drawFeedYourHead();
-        //tick_3d_unroll(screen);
         tick_3d(screen);
         //tick_dots(screen, sync);
     }
