@@ -1,12 +1,7 @@
-#include <string.h>
+#include <string.h> // memset
 #include <proto/exec.h> // AllocMem, FreeMem
-                        //#include <clib/graphics_protos.h>
-                        //#include <clib/intuition_protos.h>
-                        //#include <clib/dos_protos.h>
-                        //#include <math.h>
 #include "linedraw.h"
 #include "../system/logger.h"
-//#include "sinecosine.h"
 #include "3d.h"
 
 #define FPMUL(x,y) ((((x)>>6)*((y)>>6))>>4)  // Using 16:16 fixed point. Largest number w/o overflow is 6:10
