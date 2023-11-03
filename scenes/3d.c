@@ -7,7 +7,6 @@
 #define FPMUL(x,y) ((((x)>>6)*((y)>>6))>>4)  // Using 16:16 fixed point. Largest number w/o overflow is 6:10
 #define FPDIV(x,y) ((((x)<<6)/((y)>>6))>>4)
 #define FPP 16
-#define NRPOINTS 8
 
 #define SCREEN_W 320
 #define SCREEN_H 176
@@ -15,21 +14,46 @@
 #define SCREEN_HALF_H 88
 
 UBYTE    *back_3d = NULL;
-int      x[NRPOINTS],
-         y[NRPOINTS],
-         z[NRPOINTS];
+
+// Cube
+#define NUM_VERT 8
+#define NUM_FACES 6
+
+struct Vertices
+{
+    int x[NUM_VERT];
+    int y[NUM_VERT];
+    int z[NUM_VERT];
+};
+
+struct Vertices v;
+
+struct Faces
+{
+    int vi[4];
+};
+
+struct Faces f[NUM_FACES];
 
 void init_3d()
 {
     UBYTE i;
 
-    //GENERATE COORDINATES (A Box)
-    for(i = 0; i < NRPOINTS; i++)
-    {
-        x[i] = (50-100*(((i+1)/2)%2))<<FPP;
-        y[i] = (50-100*((i/2)%2))<<FPP;
-        z[i] = (50-100*((i/4)%2))<<FPP;
-    }
+    v.x[0] = 10<<FPP; v.y[0] = 72<<FPP; v.z[0] = 2<<FPP;
+    v.x[1] = 10<<FPP; v.y[1] = 60<<FPP; v.z[1] = 2<<FPP;
+    v.x[2] = 20<<FPP; v.y[2] = 80<<FPP; v.z[2] = 20<<FPP;
+    v.x[3] = 20<<FPP; v.y[3] = 42<<FPP; v.z[3] = 2<<FPP;
+    v.x[4] = 30<<FPP; v.y[4] = 20<<FPP; v.z[4] = 10<<FPP;
+    v.x[5] = 60<<FPP; v.y[5] = 40<<FPP; v.z[5] = 60<<FPP;
+    v.x[6] = 32<<FPP; v.y[6] = 40<<FPP; v.z[6] = 30<<FPP;
+    v.x[7] = 72<<FPP; v.y[7] = 20<<FPP; v.z[7] = 30<<FPP;
+
+    f[0].vi[0] = 1; f[0].vi[1] = 2; f[0].vi[2] = 3; f[0].vi[3] = 4;
+    f[1].vi[0] = 8; f[1].vi[1] = 7; f[1].vi[2] = 6; f[1].vi[3] = 5;
+    f[2].vi[0] = 4; f[2].vi[1] = 3; f[2].vi[2] = 7; f[2].vi[3] = 8;
+    f[3].vi[0] = 5; f[3].vi[1] = 1; f[3].vi[2] = 4; f[3].vi[3] = 8;
+    f[4].vi[0] = 5; f[4].vi[1] = 6; f[4].vi[2] = 2; f[4].vi[3] = 1;
+    f[5].vi[0] = 2; f[5].vi[1] = 6; f[5].vi[2] = 7; f[5].vi[3] = 3;
 
     back_3d = AllocMem(320 * 176, MEMF_FAST);
     if (!back_3d)
@@ -45,11 +69,11 @@ unsigned char rotz = 0;
 void tick_3d(char *screen)
 {
     UBYTE i;
-    int resx[NRPOINTS],
-    resy[NRPOINTS],
-    resz[NRPOINTS],
-    scrx[NRPOINTS],
-    scry[NRPOINTS];
+    int resx[NUM_VERT];
+    int resy[NUM_VERT];
+    int resz[NUM_VERT];
+    int scrx[NUM_VERT];
+    int scry[NUM_VERT];
     int mat[4][4]; // The rotation matrix
     int sx,sy,sz,cx,cy,cz;
 
@@ -78,11 +102,11 @@ void tick_3d(char *screen)
     //memcpy(screen, back_3d, 320*256); // draw background
 
     // Rotate and Perspective
-    for(i = 0; i < NRPOINTS; i++)
+    for(i = 0; i < NUM_VERT; i++)
     {
-        resx[i] = FPMUL(x[i],mat[0][0]) + FPMUL(y[i],mat[1][0]) + FPMUL(z[i],mat[2][0]);
-        resy[i] = FPMUL(x[i],mat[0][1]) + FPMUL(y[i],mat[1][1]) + FPMUL(z[i],mat[2][1]);
-        resz[i] = FPMUL(x[i],mat[0][2]) + FPMUL(y[i],mat[1][2]) + FPMUL(z[i],mat[2][2]) + (256<<FPP);
+        resx[i] = FPMUL(v.x[i],mat[0][0]) + FPMUL(v.y[i],mat[1][0]) + FPMUL(v.z[i],mat[2][0]);
+        resy[i] = FPMUL(v.x[i],mat[0][1]) + FPMUL(v.y[i],mat[1][1]) + FPMUL(v.z[i],mat[2][1]);
+        resz[i] = FPMUL(v.x[i],mat[0][2]) + FPMUL(v.y[i],mat[1][2]) + FPMUL(v.z[i],mat[2][2]) + (256<<FPP);
 
         //MAKE PERSPECTIVE 
         scrx[i] = FPDIV(resx[i], resz[i]); // Mult with 1/x table (32k) instead of div
@@ -94,11 +118,17 @@ void tick_3d(char *screen)
     }
 
     // DRAW OBJECT
-    for(i = 0; i < NRPOINTS/2; i++)
+    for(i = 0; i < NUM_FACES; i++)
     {
-        linedraw(scrx[i], scry[i], scrx[i+4], scry[i+4], 55, screen);
-        linedraw(scrx[i], scry[i], scrx[(i+1)%4], scry[(i+1)%4], 55, screen);
-        linedraw(scrx[i+4], scry[i+4], scrx[((i+1)%4)+4], scry[((i+1)%4)+4], 55, screen);
+        char vi0 = f[i].vi[0] - 1;
+        char vi1 = f[i].vi[1] - 1;
+        char vi2 = f[i].vi[2] - 1;
+        char vi3 = f[i].vi[3] - 1;
+
+        linedraw(scrx[vi0], scry[vi0], scrx[vi1], scry[vi1], 55, screen);
+        linedraw(scrx[vi1], scry[vi1], scrx[vi2], scry[vi2], 55, screen);
+        linedraw(scrx[vi2], scry[vi2], scrx[vi3], scry[vi3], 55, screen);
+        linedraw(scrx[vi3], scry[vi3], scrx[vi0], scry[vi0], 55, screen);
     }
 }    
 
