@@ -1,10 +1,25 @@
 #ifndef THREED_H 
 #define THREED_H
+// Cube
+/* #define NUM_VERT 8 */
+/* #define NUM_FACES 6 */
+
+/* struct Vertices */
+/* { */
+/*     int x[NUM_VERT]; */
+/*     int y[NUM_VERT]; */
+/*     int z[NUM_VERT]; */
+/* }; */
+
+/* struct Faces */
+/* { */
+/*     int vi[4]; */
+/* }; */
+
 
 void init_3d();
 
 void tick_3d(char* screen);
-void tick_3d_unroll(char* screen);
 
 void deinit_3d();
 
