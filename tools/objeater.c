@@ -108,6 +108,12 @@ void write_h(char* outfilename) {
     fclose(headerFile);
 }
 
+
+// TODO:
+// Handle negative numbers
+// Handle eating obj straight outta blender 
+// Dont hardcode input file, get it from args
+
 int main() {
     load_obj("../data/cube2.obj");
     write_h("../scenes/cube.h");
