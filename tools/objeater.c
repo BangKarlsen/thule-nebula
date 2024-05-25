@@ -110,6 +110,6 @@ void write_h(char* outfilename) {
 
 int main() {
     load_obj("../data/cube2.obj");
-    write_h("../scenes/cube2.h");
+    write_h("../scenes/cube.h");
     return 0;
 }
