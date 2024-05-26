@@ -112,10 +112,18 @@ void write_h(char* outfilename) {
 // TODO:
 // Handle negative numbers
 // Handle eating obj straight outta blender 
-// Dont hardcode input file, get it from args
 
-int main() {
-    load_obj("../data/cube2.obj");
-    write_h("../scenes/cube.h");
+int main(int argc, char *argv[]) {
+    if(argc < 2) {
+        printf("ERROR! objeater needs somthing to eat! Add obj file as input argument 💃\n");
+        return 1;
+    }
+
+    load_obj(argv[1]);
+    char out_file[25];
+    sprintf(out_file, "%s.h", argv[1]);
+    printf("Writing to: %s\n", out_file);
+    write_h(out_file);
+
     return 0;
 }
