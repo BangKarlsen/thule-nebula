@@ -23,12 +23,13 @@ struct Face {
 
 struct Face f[MAX_NUM_FACES];
 
-void load_obj(char* filename)
+// Function to parse .obj file
+int load_obj(char* filename)
 {
     FILE* file = fopen(filename, "r");
     if(file == NULL){
-        printf("Failed to open file!\n");
-        return;
+        printf("Failed to open file [%s]!\n", filename);
+        return -1;
     }
 
     char lineheader[128];
@@ -58,15 +59,17 @@ void load_obj(char* filename)
             num_faces++;
         }
     }
+
     fclose(file);
+    return 0;
 }
 
-// Function to parse .obj file and output C header file
-void write_h(char* outfilename) {
+// Function to output C header file
+int write_h(char* outfilename) {
     FILE* headerFile = fopen(outfilename, "w");
     if(headerFile == NULL){
-        printf("Failed to open output file!\n");
-        return;
+        printf("Failed to open output file [%s]!\n", outfilename);
+        return -1;
     }
 
     fprintf(headerFile, "#ifndef OUTPUT_H\n");
@@ -106,6 +109,7 @@ void write_h(char* outfilename) {
     fprintf(headerFile, "#endif // OUTPUT_H\n");
 
     fclose(headerFile);
+    return 0;
 }
 
 
@@ -116,14 +120,20 @@ void write_h(char* outfilename) {
 int main(int argc, char *argv[]) {
     if(argc < 2) {
         printf("ERROR! objeater needs somthing to eat! Add obj file as input argument 💃\n");
-        return 1;
+        return -1;
     }
 
-    load_obj(argv[1]);
-    char out_file[25];
+    if(load_obj(argv[1])){
+        return -1;
+    }
+
+    char out_file[255];
     sprintf(out_file, "%s.h", argv[1]);
     printf("Writing to: %s\n", out_file);
-    write_h(out_file);
+
+    if(write_h(out_file)){
+        return -1;
+    }
 
     return 0;
 }
